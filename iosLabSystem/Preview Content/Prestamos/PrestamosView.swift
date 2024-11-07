@@ -25,22 +25,24 @@ struct PrestamosView: View {
                     Text("INGRESA NOMBRE COMPLETO")
                         .fontWeight(.semibold)
                         .foregroundColor(.gray1)
-                    TextField("Nombre Completo", text: .constant(""))
-                        .padding()
-                        .foregroundStyle(.black)
-                        .frame(width: 450,height: 30)
-                        .background(.gray.opacity(10))
-                        .cornerRadius(10)
+                    
+                    TextField(text: .constant("")) {
+                        Text("Nombre Completo")
+                            .foregroundStyle(.black)
+                    }
+                    .textFieldStyle(.roundedBorder)
+                    .padding(.horizontal)
                     Text("INGRESA NÚMERO DE CUENTE")
                         .fontWeight(.semibold)
                         .foregroundColor(.gray1)
                         .padding(.top)
-                    TextField("Numero de Cuenta", text: .constant(""))
-                        .padding(.horizontal)
-                        .foregroundStyle(.black)
-                        .frame(width: 450,height: 30)
-                        .background(.gray.opacity(10))
-                        .cornerRadius(10)
+                    TextField(text: .constant("")) {
+                        Text("Numero de Cuenta")
+                            .foregroundStyle(.black)
+                    }
+                    .textFieldStyle(.roundedBorder)
+                    .padding(.horizontal)
+                    
                     Text("SELECCIONE  TIPO DE DISPOSITIVO")
                         .fontWeight(.semibold)
                         .foregroundColor(.gray1)
@@ -56,16 +58,21 @@ struct PrestamosView: View {
                         .fontWeight(.semibold)
                         .foregroundColor(.gray1)
                         .padding(.top)
-                    Spacer()
                     ZStack {
-                        Color.gray3.opacity(0.7)
+                        Color.search.opacity(0.7)
                             .cornerRadius(20)
-                        TextField("\(Image(systemName: "magnifyingglass"))  Search", text: .constant(""))
-                            .padding(.horizontal)
-                            .padding(.vertical, 7.5)
+                        HStack {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundStyle(.gray3)
+                            TextField("Search", text: .constant(""))
+                                .textFieldStyle(.plain)
+                        }
+                        .padding(.horizontal)
                     }
-                    .padding()
+                    .frame(width: 200, height: 25)
+
                     
+                    Spacer()
                 }.navigationTitle("Prestamos")
                 .padding()
                 Spacer()
@@ -85,6 +92,12 @@ struct PrestamosView: View {
 //        .cornerRadius(10)
     }
 }
+
+#Preview {
+    ContentView()
+        .modelContainer(for: Item.self, inMemory: true)
+}
+
 
 #Preview {
     PrestamosView()

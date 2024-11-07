@@ -62,6 +62,7 @@ struct ContentView: View {
         } detail: {
             PrestamosView()
         }
+        .background(Color.white.edgesIgnoringSafeArea(.all))
     }
 
     private func addItem() {
