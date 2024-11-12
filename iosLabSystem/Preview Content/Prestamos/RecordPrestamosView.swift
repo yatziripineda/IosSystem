@@ -33,7 +33,8 @@ struct RecordPrestamosView: View {
                         }
                     }
                 }
-            }.navigationTitle("Prestamos")
+            }.listStyle(.plain)
+            .navigationTitle("Prestamos")
                 .toolbar {
                     Button("Agregar prestamo") {
                         addPrestamo.toggle()

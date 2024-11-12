@@ -33,11 +33,11 @@ struct AddPrestamosView: View {
     var body: some View {
         
         NavigationStack{
-            HStack{
+//            HStack{
                 VStack(alignment: .leading){
                     Text("INGRESA NOMBRE COMPLETO")
-                        .fontWeight(.semibold)
                         .foregroundColor(.gray1)
+                        .font(.caption)
                     
                     TextField(text: $usuario.fullname) {
                         Text("Nombre Completo")
@@ -46,9 +46,9 @@ struct AddPrestamosView: View {
                     .textFieldStyle(.roundedBorder)
                     .padding(.horizontal)
                     Text("INGRESA NÚMERO DE CUENTE")
-                        .fontWeight(.semibold)
                         .foregroundColor(.gray1)
                         .padding(.top)
+                        .font(.caption)
                     TextField(text: $usuario.numeroCuenta) {
                         Text("Numero de Cuenta")
                             .foregroundStyle(.black)
@@ -57,9 +57,9 @@ struct AddPrestamosView: View {
                     .padding(.horizontal)
                     
                     Text("SELECCIONE  TIPO DE DISPOSITIVO")
-                        .fontWeight(.semibold)
                         .foregroundColor(.gray1)
                         .padding(.top)
+                        .font(.caption)
                     
                     Picker("", selection: $selectedDevice) {
                         Text("Mackbook").tag(SelectedDevice.Mackbook)
@@ -79,6 +79,7 @@ struct AddPrestamosView: View {
                         .padding(.horizontal)
                     }
                     .frame(width: 200, height: 25)
+                    
                     List {
                         ForEach(Equipos.filter { equipo in
                             equipo.type == selectedDevice.rawValue &&
@@ -87,7 +88,7 @@ struct AddPrestamosView: View {
                         }) { equi in
                             buttonview(equi)
                         }
-                    }
+                    }.listStyle(.plain)
                     Spacer()
                     HStack{
                         Button {
@@ -107,18 +108,20 @@ struct AddPrestamosView: View {
                         
                     }
 
-                }.navigationTitle("Prestamos")
+                }
                 .padding()
-                Spacer()
-            }
+                .navigationTitle("Prestamos")
+//            }
         }
     }
     func buttonview(_ equipo: Equipo) -> some View {
-        Button {
-            usuario.Equipos!.append(equipo)
-        } label: {
-            Text("\(equipo.number)")
-        }.buttonStyle(.plain)
+        HStack{
+            Button {
+                usuario.Equipos!.append(equipo)
+            } label: {
+                Text("\(equipo.number)")
+            }.buttonStyle(.plain)
+        }
     }
     
 }
