@@ -6,17 +6,30 @@
 //
 
 import SwiftUI
+import SwiftData
 
 
-enum SelectedDevice: String, CaseIterable, Identifiable {
-    case Mackbook, IPad, IPhone, AppleWatch
-    var id: Self { self }
-}
 
 
-struct PrestamosView: View {
+
+struct AddPrestamosView: View {
     
     @State var selectedDevice: SelectedDevice = .Mackbook
+    @State var searchNumber: String = ""
+//    @State var fullname: String = ""
+//    @State var numeroCuenta: String = ""
+//    @State var statusUsuario: String = ""
+    
+    @Query private var Usuarios: [Usuario]
+    @Query private var Equipos: [Equipo]
+    
+    
+    @Environment(\.modelContext) var modelContext
+    @Environment(\.dismiss) private var dismiss
+    
+    @State private var usuario: Usuario = Usuario(fullname: "", numeroCuenta: "", statusUsuario: "")
+   
+    
     var body: some View {
         
         NavigationStack{
@@ -26,7 +39,7 @@ struct PrestamosView: View {
                         .fontWeight(.semibold)
                         .foregroundColor(.gray1)
                     
-                    TextField(text: .constant("")) {
+                    TextField(text: $usuario.fullname) {
                         Text("Nombre Completo")
                             .foregroundStyle(.black)
                     }
@@ -36,7 +49,7 @@ struct PrestamosView: View {
                         .fontWeight(.semibold)
                         .foregroundColor(.gray1)
                         .padding(.top)
-                    TextField(text: .constant("")) {
+                    TextField(text: $usuario.numeroCuenta) {
                         Text("Numero de Cuenta")
                             .foregroundStyle(.black)
                     }
@@ -54,53 +67,82 @@ struct PrestamosView: View {
                         Text("IPhone").tag(SelectedDevice.IPhone)
                         Text("AppleWatch").tag(SelectedDevice.AppleWatch)
                     }.pickerStyle(.segmented)
-                    Text("SELECCIONE  DISPOSITIVO DISPONIBLE")
-                        .fontWeight(.semibold)
-                        .foregroundColor(.gray1)
-                        .padding(.top)
                     ZStack {
                         Color.search.opacity(0.7)
                             .cornerRadius(20)
                         HStack {
                             Image(systemName: "magnifyingglass")
                                 .foregroundStyle(.gray3)
-                            TextField("Search", text: .constant(""))
+                            TextField("Search", text: $searchNumber)
                                 .textFieldStyle(.plain)
                         }
                         .padding(.horizontal)
                     }
                     .frame(width: 200, height: 25)
-
-                    
+                    List {
+                        ForEach(Equipos.filter { equipo in
+                            equipo.type == selectedDevice.rawValue &&
+                            equipo.statusEquipo == true &&
+                            (Int(searchNumber) == nil || equipo.number == Int(searchNumber))
+                        }) { equi in
+                            buttonview(equi)
+                        }
+                    }
                     Spacer()
+                    HStack{
+                        Button {
+                            save()
+                            dismiss()
+                            
+                        } label: {
+                            Text("Registrar prestamo")
+                        }.buttonStyle(.plain)
+                        Spacer()
+                        Button {
+                            dismiss()
+                            
+                        } label: {
+                            Text("Cancel")
+                        }.buttonStyle(.plain)
+                        
+                    }
+
                 }.navigationTitle("Prestamos")
                 .padding()
                 Spacer()
             }
         }
-        // Body/Regular
-//        HStack(alignment: .bottom, spacing: 0) {
-//            Text("Nombre Completo")
-//                .font(Font.custom("SF Pro", size: 17))
-//                .foregroundColor(Constants.LabelsSecondary)
-//                .frame(maxWidth: .infinity, minHeight: 22, maxHeight: 22, alignment: .topLeading)
-//        }
-//        .padding(.horizontal, 8)
-//        .padding(.vertical, 7)
-//        .frame(maxWidth: .infinity, alignment: .bottom)
-//        .background(Constants.FillsTertiary)
-//        .cornerRadius(10)
+    }
+    func buttonview(_ equipo: Equipo) -> some View {
+        Button {
+            usuario.Equipos!.append(equipo)
+        } label: {
+            Text("\(equipo.number)")
+        }.buttonStyle(.plain)
+    }
+    
+}
+
+
+private extension  AddPrestamosView {
+    
+    func save() {
+        modelContext.insert(usuario)
+        
     }
 }
 
+
+
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: Usuario.self, inMemory: true)
 }
 
 
 #Preview {
-    PrestamosView()
+    AddPrestamosView()
+        .modelContainer(for: Usuario.self, inMemory: true)
 }
 
 

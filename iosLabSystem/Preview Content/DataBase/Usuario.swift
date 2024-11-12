@@ -8,14 +8,18 @@
 import Foundation
 import SwiftData
 
+
+
+
 @Model
-final class Usuario {
+class Usuario {
     var fullname: String
     var numeroCuenta: String
-    var statusUsuario: StatusDelUsuario
-    var Equipos: [Equipo?]
+    var statusUsuario: String
     
-    init(fullname: String, numeroCuenta: String, statusUsuario: StatusDelUsuario, Equipos: [Equipo?]) {
+    var Equipos: [Equipo]?
+    
+    init(fullname: String, numeroCuenta: String, statusUsuario: String, Equipos: [Equipo]? = nil) {
         self.fullname = fullname
         self.numeroCuenta = numeroCuenta
         self.statusUsuario = statusUsuario
